@@ -30,7 +30,7 @@ import urllib.error
 import urllib.request
 from datetime import datetime, timezone
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 USER_AGENT = "devdash/" + __version__ + " (+https://github.com/wetair1/devdash)"
 
 API_GITHUB = "https://api.github.com"
@@ -343,6 +343,116 @@ PROVIDERS = {
     "codeforces": fetch_codeforces,
 }
 
+TUI_PROVIDER_ORDER = ["github", "gitlab", "codeforces"]
+TUI_THEME_ORDER = ["arch", "matrix", "amber", "nord", "mono"]
+
+
+def run_tui(args):
+    try:
+        import curses
+    except Exception:  # noqa: BLE001
+        print("Interactive TUI needs the 'curses' module (not available here).")
+        return 1
+    try:
+        return curses.wrapper(_tui_main, args)
+    except curses.error as exc:
+        print("TUI could not start: " + str(exc))
+        return 1
+
+
+def _tui_main(stdscr, args):
+    import curses
+
+    curses.curs_set(1)
+    stdscr.keypad(True)
+    has_color = False
+    try:
+        if curses.has_colors():
+            curses.start_color()
+            curses.use_default_colors()
+            curses.init_pair(1, curses.COLOR_CYAN, -1)
+            has_color = True
+    except curses.error:
+        has_color = False
+    accent = (curses.color_pair(1) | curses.A_BOLD) if has_color else curses.A_BOLD
+
+    def put(y, x, text, attr=0):
+        try:
+            mh, mw = stdscr.getmaxyx()
+            if y < 0 or y >= mh or x < 0:
+                return
+            stdscr.addnstr(y, x, text, max(0, mw - x - 1), attr)
+        except curses.error:
+            pass
+
+    handle = args.github or args.gitlab or args.codeforces or ""
+    prov_idx = 0
+    if args.gitlab and not args.github:
+        prov_idx = 1
+    elif args.codeforces and not (args.github or args.gitlab):
+        prov_idx = 2
+    theme_idx = TUI_THEME_ORDER.index(args.theme) if args.theme in TUI_THEME_ORDER else 0
+    body = []
+    scroll = 0
+
+    def rebuild():
+        pal = Palette(TUI_THEME_ORDER[theme_idx], False)
+        provider = TUI_PROVIDER_ORDER[prov_idx]
+        try:
+            data = PROVIDERS[provider](handle.strip())
+            return render_profile(data, pal, args.width)
+        except Exception as exc:  # noqa: BLE001
+            return ["error: " + str(exc)]
+
+    while True:
+        stdscr.erase()
+        h, w = stdscr.getmaxyx()
+        title = " devdash tui   provider: %s   theme: %s" % (
+            TUI_PROVIDER_ORDER[prov_idx], TUI_THEME_ORDER[theme_idx])
+        put(0, 0, title.ljust(w), accent)
+        put(1, 0, ("handle> " + handle).ljust(w), curses.A_BOLD)
+        put(2, 0, "\u2500" * w)
+        area = max(0, h - 4)
+        for i, line in enumerate(body[scroll:scroll + area]):
+            put(3 + i, 0, line)
+        footer = " Enter=fetch  Tab=provider  ^T=theme  Up/Down=scroll  ESC=quit "
+        put(h - 1, 0, footer.ljust(w), curses.A_REVERSE)
+        try:
+            stdscr.move(1, min(len("handle> ") + len(handle), max(0, w - 1)))
+        except curses.error:
+            pass
+        stdscr.refresh()
+
+        ch = stdscr.getch()
+        if ch in (27,):
+            return 0
+        elif ch in (curses.KEY_ENTER, 10, 13):
+            if handle.strip():
+                put(h - 1, 0, (" fetching " + handle.strip() + " ... ").ljust(w), curses.A_REVERSE)
+                stdscr.refresh()
+                body = rebuild()
+                scroll = 0
+        elif ch in (curses.KEY_BACKSPACE, 127, 8):
+            handle = handle[:-1]
+        elif ch == curses.KEY_UP:
+            scroll = max(0, scroll - 1)
+        elif ch == curses.KEY_DOWN:
+            scroll = min(max(0, len(body) - 1), scroll + 1)
+        elif ch == curses.KEY_PPAGE:
+            scroll = max(0, scroll - area)
+        elif ch == curses.KEY_NPAGE:
+            scroll = min(max(0, len(body) - 1), scroll + area)
+        elif ch == 9:  # Tab cycles provider
+            prov_idx = (prov_idx + 1) % len(TUI_PROVIDER_ORDER)
+            if body:
+                body = rebuild()
+        elif ch == 20:  # Ctrl-T cycles theme
+            theme_idx = (theme_idx + 1) % len(TUI_THEME_ORDER)
+            if body:
+                body = rebuild()
+        elif 32 <= ch < 127:
+            handle += chr(ch)
+
 
 def build_parser():
     p = argparse.ArgumentParser(
@@ -360,6 +470,7 @@ def build_parser():
     p.add_argument("--watch", type=float, metavar="SEC",
                    help="refresh every SEC seconds (live mode)")
     p.add_argument("--list-themes", action="store_true", help="list themes and exit")
+    p.add_argument("--tui", action="store_true", help="launch interactive TUI")
     p.add_argument("--version", action="version", version="devdash " + __version__)
     return p
 
@@ -399,6 +510,13 @@ def main(argv=None):
         for name in sorted(THEMES):
             print(name)
         return 0
+
+    if args.tui or (not (args.github or args.gitlab or args.codeforces)
+                    and sys.stdin.isatty() and sys.stdout.isatty()):
+        try:
+            return run_tui(args)
+        except KeyboardInterrupt:
+            return 0
 
     if not (args.github or args.gitlab or args.codeforces):
         build_parser().print_help()
