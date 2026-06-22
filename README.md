@@ -1,5 +1,7 @@
 # devdash
 
+![python](https://img.shields.io/badge/python-3.8%2B-blue) ![deps](https://img.shields.io/badge/dependencies-0-success) ![license](https://img.shields.io/badge/license-MIT-green) ![platform](https://img.shields.io/badge/platform-terminal-lightgrey)
+
 An ASCII **developer-profile dashboard** for your terminal. Pull your public
 stats from multiple coding platforms and render them as tidy bordered widgets
 with switchable color themes — GitHub, GitLab and Codeforces in one screen.
@@ -15,6 +17,7 @@ It talks to public JSON APIs over `urllib`, so it runs anywhere Python does.
 - ⭐ **Top repositories** ranked by stars
 - 🏆 **Codeforces** rating, max rating and rank
 - 🎨 **Themes:** `arch`, `matrix`, `amber`, `nord`, `mono`
+- 🖥 **Interactive TUI** (`--tui`) — type a handle live, Tab switches provider, Ctrl-T switches theme
 - 📦 **`--json` mode** for piping into other tools
 - 🔁 **`--watch` mode** to refresh live
 - 🪛 **Graceful fallback** — a provider that fails to load is shown with an
@@ -30,7 +33,7 @@ It talks to public JSON APIs over `urllib`, so it runs anywhere Python does.
 
 ## Requirements
 
-- Python 3.7+
+- Python 3.8+
 - A terminal with 256-color / truecolor support (use `--no-color` otherwise)
 - Network access to reach the provider APIs
 
@@ -52,6 +55,7 @@ ln -s "$PWD/devdash.py" ~/.local/bin/devdash
 ## Usage
 
 ```bash
+python3 devdash.py --tui                            # interactive TUI
 python3 devdash.py --github wetair1
 python3 devdash.py --github wetair1 --gitlab gitlab-org --theme matrix
 python3 devdash.py --codeforces tourist
@@ -67,6 +71,7 @@ python3 devdash.py --list-themes
 | `--github USER` | GitHub username |
 | `--gitlab USER` | GitLab username |
 | `--codeforces HANDLE` | Codeforces handle |
+| `--tui` | launch the interactive TUI |
 | `--theme NAME` | color theme (default: `arch`) |
 | `--width N` | widget width |
 | `--no-color` | disable ANSI colors |
