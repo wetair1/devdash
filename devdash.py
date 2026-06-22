@@ -30,7 +30,7 @@ import urllib.error
 import urllib.request
 from datetime import datetime, timezone
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 USER_AGENT = "devdash/" + __version__ + " (+https://github.com/wetair1/devdash)"
 
 API_GITHUB = "https://api.github.com"
@@ -42,11 +42,31 @@ API_CODEFORCES = "https://codeforces.com/api"
 # Themes & colors
 # --------------------------------------------------------------------------- #
 THEMES = {
-    "arch":   {"border": "\033[38;5;33m",  "title": "\033[1;38;5;39m",  "accent": "\033[38;5;51m",  "text": "\033[38;5;253m", "dim": "\033[38;5;245m"},
-    "matrix": {"border": "\033[38;5;28m",  "title": "\033[1;38;5;46m",  "accent": "\033[38;5;82m",  "text": "\033[38;5;40m",  "dim": "\033[38;5;28m"},
-    "amber":  {"border": "\033[38;5;130m", "title": "\033[1;38;5;214m", "accent": "\033[38;5;220m", "text": "\033[38;5;215m", "dim": "\033[38;5;136m"},
-    "nord":   {"border": "\033[38;5;110m", "title": "\033[1;38;5;81m",  "accent": "\033[38;5;116m", "text": "\033[38;5;253m", "dim": "\033[38;5;109m"},
-    "mono":   {"border": "\033[38;5;245m", "title": "\033[1;38;5;255m", "accent": "\033[38;5;250m", "text": "\033[38;5;252m", "dim": "\033[38;5;243m"},
+    "arch":       {"border": "\033[38;5;33m",  "title": "\033[1;38;5;39m",  "accent": "\033[38;5;51m",  "text": "\033[38;5;253m", "dim": "\033[38;5;245m"},
+    "matrix":     {"border": "\033[38;5;28m",  "title": "\033[1;38;5;46m",  "accent": "\033[38;5;82m",  "text": "\033[38;5;40m",  "dim": "\033[38;5;28m"},
+    "amber":      {"border": "\033[38;5;130m", "title": "\033[1;38;5;214m", "accent": "\033[38;5;220m", "text": "\033[38;5;215m", "dim": "\033[38;5;136m"},
+    "nord":       {"border": "\033[38;5;110m", "title": "\033[1;38;5;81m",  "accent": "\033[38;5;116m", "text": "\033[38;5;253m", "dim": "\033[38;5;109m"},
+    "mono":       {"border": "\033[38;5;245m", "title": "\033[1;38;5;255m", "accent": "\033[38;5;250m", "text": "\033[38;5;252m", "dim": "\033[38;5;243m"},
+    "gruvbox":    {"border": "\033[38;5;172m", "title": "\033[1;38;5;214m", "accent": "\033[38;5;142m", "text": "\033[38;5;223m", "dim": "\033[38;5;245m"},
+    "dracula":    {"border": "\033[38;5;61m",  "title": "\033[1;38;5;212m", "accent": "\033[38;5;141m", "text": "\033[38;5;253m", "dim": "\033[38;5;103m"},
+    "tokyonight": {"border": "\033[38;5;60m",  "title": "\033[1;38;5;111m", "accent": "\033[38;5;117m", "text": "\033[38;5;253m", "dim": "\033[38;5;103m"},
+    "solarized":  {"border": "\033[38;5;37m",  "title": "\033[1;38;5;33m",  "accent": "\033[38;5;136m", "text": "\033[38;5;244m", "dim": "\033[38;5;240m"},
+    "monokai":    {"border": "\033[38;5;161m", "title": "\033[1;38;5;197m", "accent": "\033[38;5;148m", "text": "\033[38;5;253m", "dim": "\033[38;5;102m"},
+    "onedark":    {"border": "\033[38;5;75m",  "title": "\033[1;38;5;39m",  "accent": "\033[38;5;114m", "text": "\033[38;5;145m", "dim": "\033[38;5;240m"},
+    "catppuccin": {"border": "\033[38;5;183m", "title": "\033[1;38;5;212m", "accent": "\033[38;5;117m", "text": "\033[38;5;189m", "dim": "\033[38;5;103m"},
+    "synthwave":  {"border": "\033[38;5;201m", "title": "\033[1;38;5;213m", "accent": "\033[38;5;51m",  "text": "\033[38;5;219m", "dim": "\033[38;5;90m"},
+    "ocean":      {"border": "\033[38;5;31m",  "title": "\033[1;38;5;39m",  "accent": "\033[38;5;45m",  "text": "\033[38;5;152m", "dim": "\033[38;5;24m"},
+    "forest":     {"border": "\033[38;5;22m",  "title": "\033[1;38;5;34m",  "accent": "\033[38;5;40m",  "text": "\033[38;5;151m", "dim": "\033[38;5;28m"},
+    "rosepine":   {"border": "\033[38;5;167m", "title": "\033[1;38;5;211m", "accent": "\033[38;5;73m",  "text": "\033[38;5;223m", "dim": "\033[38;5;102m"},
+    "ayu":        {"border": "\033[38;5;208m", "title": "\033[1;38;5;214m", "accent": "\033[38;5;39m",  "text": "\033[38;5;250m", "dim": "\033[38;5;240m"},
+    "cyberpunk":  {"border": "\033[38;5;198m", "title": "\033[1;38;5;226m", "accent": "\033[38;5;51m",  "text": "\033[38;5;219m", "dim": "\033[38;5;91m"},
+    "sunset":     {"border": "\033[38;5;202m", "title": "\033[1;38;5;208m", "accent": "\033[38;5;197m", "text": "\033[38;5;223m", "dim": "\033[38;5;130m"},
+    "ice":        {"border": "\033[38;5;117m", "title": "\033[1;38;5;159m", "accent": "\033[38;5;51m",  "text": "\033[38;5;195m", "dim": "\033[38;5;109m"},
+    "lava":       {"border": "\033[38;5;124m", "title": "\033[1;38;5;196m", "accent": "\033[38;5;208m", "text": "\033[38;5;223m", "dim": "\033[38;5;88m"},
+    "mint":       {"border": "\033[38;5;36m",  "title": "\033[1;38;5;48m",  "accent": "\033[38;5;86m",  "text": "\033[38;5;194m", "dim": "\033[38;5;29m"},
+    "grape":      {"border": "\033[38;5;92m",  "title": "\033[1;38;5;135m", "accent": "\033[38;5;177m", "text": "\033[38;5;189m", "dim": "\033[38;5;54m"},
+    "coffee":     {"border": "\033[38;5;94m",  "title": "\033[1;38;5;130m", "accent": "\033[38;5;173m", "text": "\033[38;5;223m", "dim": "\033[38;5;58m"},
+    "crimson":    {"border": "\033[38;5;88m",  "title": "\033[1;38;5;196m", "accent": "\033[38;5;203m", "text": "\033[38;5;224m", "dim": "\033[38;5;52m"},
 }
 RESET = "\033[0m"
 
@@ -249,7 +269,7 @@ def bar(value, total, width=16):
     if total <= 0:
         return " " * width
     filled = max(0, min(width, round(width * value / total)))
-    return "█" * filled + "░" * (width - filled)
+    return "\u2588" * filled + "\u2591" * (width - filled)
 
 
 def _fmt_date(iso):
@@ -264,14 +284,14 @@ def _fmt_date(iso):
 
 def box(title, lines, pal, width=52):
     inner = width - 2
-    top = pal.paint("border", "╭─ ") + pal.paint("title", title) + " " \
-        + pal.paint("border", "─" * max(0, inner - 3 - pal.width(title)) + "╮")
+    top = pal.paint("border", "\u256d\u2500 ") + pal.paint("title", title) + " " \
+        + pal.paint("border", "\u2500" * max(0, inner - 3 - pal.width(title)) + "\u256e")
     out = [top]
     for ln in lines:
         pad = inner - 1 - pal.width(ln)
-        out.append(pal.paint("border", "│") + " " + ln + " " * max(0, pad)
-                   + pal.paint("border", "│"))
-    out.append(pal.paint("border", "╰" + "─" * inner + "╯"))
+        out.append(pal.paint("border", "\u2502") + " " + ln + " " * max(0, pad)
+                   + pal.paint("border", "\u2502"))
+    out.append(pal.paint("border", "\u2570" + "\u2500" * inner + "\u256f"))
     return out
 
 
@@ -286,12 +306,12 @@ def render_profile(data, pal, width=52):
         header.append(pal.paint("text", data["bio"][: width - 4]))
     meta = []
     if data.get("location"):
-        meta.append("📍 " + data["location"])
+        meta.append("\U0001f4cd " + data["location"])
     if data.get("created"):
-        meta.append("📅 joined " + _fmt_date(data["created"]))
+        meta.append("\U0001f4c5 joined " + _fmt_date(data["created"]))
     if meta:
         header.append(pal.paint("dim", "  ".join(meta)))
-    lines += box(data["provider"] + " · profile", header, pal, width)
+    lines += box(data["provider"] + " \u00b7 profile", header, pal, width)
 
     stat_lines = []
     for key, val in data["stats"].items():
@@ -314,19 +334,19 @@ def render_profile(data, pal, width=52):
     if data.get("top_repos"):
         repo_lines = []
         for r in data["top_repos"]:
-            star = pal.paint("accent", ("★ " + str(r["stars"])).ljust(8))
+            star = pal.paint("accent", ("\u2605 " + str(r["stars"])).ljust(8))
             lang = pal.paint("dim", ("[" + r["lang"] + "]") if r["lang"] else "")
             repo_lines.append(star + " " + pal.paint("text", r["name"]) + " " + lang)
         lines += box("top repositories", repo_lines, pal, width)
 
     if data.get("url"):
-        lines.append(pal.paint("dim", "  ↗ " + data["url"]))
+        lines.append(pal.paint("dim", "  \u2197 " + data["url"]))
     return lines
 
 
 def render_all(results, pal, width=52):
     stamp = datetime.now(timezone.utc).astimezone().strftime("%Y-%m-%d %H:%M:%S")
-    head = pal.paint("title", "  devdash") + pal.paint("dim", "  -  dev profile dashboard  ·  " + stamp)
+    head = pal.paint("title", "  devdash") + pal.paint("dim", "  -  dev profile dashboard  \u00b7  " + stamp)
     blocks = [head, ""]
     for data in results:
         blocks += render_profile(data, pal, width)
@@ -344,7 +364,7 @@ PROVIDERS = {
 }
 
 TUI_PROVIDER_ORDER = ["github", "gitlab", "codeforces"]
-TUI_THEME_ORDER = ["arch", "matrix", "amber", "nord", "mono"]
+TUI_THEME_ORDER = ["arch", "matrix", "amber", "nord", "mono", "gruvbox", "dracula", "tokyonight", "solarized", "monokai", "onedark", "catppuccin", "synthwave", "ocean", "forest", "rosepine", "ayu", "cyberpunk", "sunset", "ice", "lava", "mint", "grape", "coffee", "crimson"]
 
 
 def run_tui(args):
@@ -498,7 +518,7 @@ def collect(args):
                 "provider": name.capitalize(),
                 "handle": value,
                 "name": value,
-                "bio": "⚠ could not load: " + str(exc),
+                "bio": "\u26a0 could not load: " + str(exc),
                 "location": "",
                 "created": "",
                 "stats": {},
