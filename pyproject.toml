@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "devdash"
+version = "0.1.0"
+description = "ASCII terminal dashboard for your developer profile (GitHub and more)."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { file = "LICENSE" }
+authors = [{ name = "wetair1" }]
+keywords = ["github", "dashboard", "terminal", "tui", "ascii", "developer"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Environment :: Console",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/wetair1/devdash"
+Repository = "https://github.com/wetair1/devdash"
+
+[project.scripts]
+devdash = "devdash:main"
+
+[tool.setuptools]
+py-modules = ["devdash"]
