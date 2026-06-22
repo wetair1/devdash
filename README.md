@@ -1,15 +1,17 @@
 # devdash
 
-![python](https://img.shields.io/badge/python-3.8%2B-blue) ![deps](https://img.shields.io/badge/dependencies-0-success) ![license](https://img.shields.io/badge/license-MIT-green) ![platform](https://img.shields.io/badge/platform-terminal-lightgrey)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
+[![Dependencies](https://img.shields.io/badge/dependencies-none-success.svg)](#)
+[![Platform](https://img.shields.io/badge/platform-terminal-lightgrey.svg)](#)
 
-An ASCII **developer-profile dashboard** for your terminal. Pull your public
-stats from multiple coding platforms and render them as tidy bordered widgets
-with switchable color themes — GitHub, GitLab and Codeforces in one screen.
+> An ASCII **developer-profile dashboard** for your terminal.
 
-Pure **Python 3, standard library only** — no `pip install`, no dependencies.
-It talks to public JSON APIs over `urllib`, so it runs anywhere Python does.
+Pull your public stats from multiple coding platforms and render them as tidy bordered widgets with switchable color themes — GitHub, GitLab and Codeforces in one screen.
 
-## Features
+Pure **Python 3, standard library only** — no `pip install`, no dependencies. It talks to public JSON APIs over `urllib`, so it runs anywhere Python does.
+
+## ✨ Features
 
 - 👤 **Profile card** — name, handle, bio, location, join date
 - 📊 **Stats** — repos, followers, total stars & forks (per platform)
@@ -20,10 +22,9 @@ It talks to public JSON APIs over `urllib`, so it runs anywhere Python does.
 - 🖥 **Interactive TUI** (`--tui`) — type a handle live, Tab switches provider, Ctrl-T switches theme
 - 📦 **`--json` mode** for piping into other tools
 - 🔁 **`--watch` mode** to refresh live
-- 🪛 **Graceful fallback** — a provider that fails to load is shown with an
-  error line instead of crashing the whole dashboard
+- 🫛 **Graceful fallback** — a provider that fails to load is shown with an error line instead of crashing the whole dashboard
 
-## Supported providers
+## 🔌 Supported providers
 
 | Provider | Flag | Notes |
 | --- | --- | --- |
@@ -31,13 +32,13 @@ It talks to public JSON APIs over `urllib`, so it runs anywhere Python does.
 | GitLab | `--gitlab USER` | public profile + projects |
 | Codeforces | `--codeforces HANDLE` | competitive-programming rating & rank |
 
-## Requirements
+## 📋 Requirements
 
 - Python 3.8+
 - A terminal with 256-color / truecolor support (use `--no-color` otherwise)
 - Network access to reach the provider APIs
 
-## Install
+## 📥 Installation
 
 ```bash
 git clone https://github.com/wetair1/devdash.git
@@ -52,7 +53,7 @@ chmod +x devdash.py
 ln -s "$PWD/devdash.py" ~/.local/bin/devdash
 ```
 
-## Usage
+## 🚀 Usage
 
 ```bash
 python3 devdash.py --tui                            # interactive TUI
@@ -64,7 +65,7 @@ python3 devdash.py --github octocat --watch 60      # refresh every 60s
 python3 devdash.py --list-themes
 ```
 
-### CLI options
+## ⚙️ Options
 
 | Flag | Description |
 | --- | --- |
@@ -80,7 +81,7 @@ python3 devdash.py --list-themes
 | `--list-themes` | list available themes |
 | `--version` | print version |
 
-## Example output
+## 🖥 Example output
 
 ```
   devdash  -  dev profile dashboard
@@ -103,14 +104,12 @@ python3 devdash.py --list-themes
 
 (Real output uses rounded Unicode borders, block-bar glyphs and ANSI colors.)
 
-## Notes
+## 📝 Notes
 
-- GitHub limits unauthenticated API calls to ~60/hour per IP. Export
-  `GITHUB_TOKEN` to raise the limit; the token is only sent to GitHub.
-- A provider that errors out (typo, rate limit, offline) is rendered with an
-  inline warning instead of crashing the whole dashboard.
+- GitHub limits unauthenticated API calls to ~60/hour per IP. Export `GITHUB_TOKEN` to raise the limit; the token is only sent to GitHub.
+- A provider that errors out (typo, rate limit, offline) is rendered with an inline warning instead of crashing the whole dashboard.
 - `--no-color` is applied automatically when output is not a TTY (e.g. piped).
 
-## License
+## 📄 License
 
 MIT — see [LICENSE](LICENSE).
