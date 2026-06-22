@@ -396,6 +396,12 @@ def _tui_main(stdscr, args):
     scroll = 0
 
     def rebuild():
+        if not handle.strip():
+            return [
+                "",
+                "  Type a handle above and press Enter.",
+                "  Tab = switch provider    Ctrl-T = switch theme",
+            ]
         pal = Palette(TUI_THEME_ORDER[theme_idx], False)
         provider = TUI_PROVIDER_ORDER[prov_idx]
         try:
@@ -444,11 +450,11 @@ def _tui_main(stdscr, args):
             scroll = min(max(0, len(body) - 1), scroll + area)
         elif ch == 9:  # Tab cycles provider
             prov_idx = (prov_idx + 1) % len(TUI_PROVIDER_ORDER)
-            if body:
+            if body and handle.strip():
                 body = rebuild()
         elif ch == 20:  # Ctrl-T cycles theme
             theme_idx = (theme_idx + 1) % len(TUI_THEME_ORDER)
-            if body:
+            if body and handle.strip():
                 body = rebuild()
         elif 32 <= ch < 127:
             handle += chr(ch)
